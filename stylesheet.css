@@ -1,20 +1,10 @@
-
-.helloworld-label {
-    font-size: 36px;
-    font-weight: bold;
-    color: #ffffff;
-    background-color: rgba(10,10,10,0.7);
-    border-radius: 5px;
-    padding: .5em;
-}
-
-.enviromentImportant{
+.enviromentImportant {
     padding-top: 3px;
     color: red;
     font-weight: bold;
 }
 
-.enviroment{
+.enviroment {
     padding-top: 3px;
     color: aqua;
 }

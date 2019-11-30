@@ -1,3 +1,7 @@
+const ExtensionUtils = imports.misc.extensionUtils;
+const Me = ExtensionUtils.getCurrentExtension();
+const commonConst = Me.imports.commonConst;
+
 class Enviroment {
     constructor(source) {
         this.name = "Undefided";
@@ -16,7 +20,7 @@ class Enviroment {
     }
 
     isVisible() {
-        return this.name !== "common";
+        return this.name !== commonConst.COMMON;
     }
 
     isActive() {
@@ -24,7 +28,7 @@ class Enviroment {
         if (this.isVisible()) {
             active = this.enviromentVariables.some((variable_str) => {
                 let variable_options = variable_str.split(" ");
-                return variable_options[0] !== undefined && variable_options[0] !== "#" && variable_options[0] === "export";
+                return variable_options[0] !== undefined && variable_options[0] !== commonConst.SHARP && variable_options[0] === "export";
             });
         }
         return active;
@@ -32,12 +36,12 @@ class Enviroment {
 
     _parseEnviromentParameters(sourceString) {
         let options = sourceString.split(" ");
-        if (options[1] === "common") {
+        if (options[1] === commonConst.COMMON) {
             this.name = options[1];
-        } else if (options[1] === "enviroment") {
+        } else if (options[1] === commonConst.ENVIROMENT) {
             this.name = options[2];
             if (options.length === 4) {
-                this.important = options[3] === "important";
+                this.important = options[3] === commonConst.IMPORTANT;
             }
         }
     }
@@ -50,7 +54,7 @@ class Enviroment {
         if (!this.isActive()) return;
         let handle = this;
         this.enviromentVariables.forEach(function (value, index) {
-            handle.enviromentVariables[index] = "# " + value
+            handle.enviromentVariables[index] = commonConst.SHARP + " " + value
         });
     }
 
@@ -59,7 +63,7 @@ class Enviroment {
         let handle = this;
         this.enviromentVariables.forEach(function (value, index) {
             let variable_options = value.split(" ");
-            if (variable_options[0] === "#") {
+            if (variable_options[0] === commonConst.SHARP) {
                 variable_options.shift();
             }
             handle.enviromentVariables[index] = variable_options.join(" ")
@@ -67,15 +71,15 @@ class Enviroment {
     }
 
     toString() {
-        let enviromentContent = "";
+        let enviromentContent = commonConst.SHARP + " ";
         if (!this.isVisible()) {
-            enviromentContent = "# " + this.getName();
+            enviromentContent = this.getName();
         } else {
-            enviromentContent = "# enviroment " + this.getName();
+            enviromentContent = "enviroment " + this.getName();
         }
 
-        if (this.isImportant()){
-            enviromentContent += " important";
+        if (this.isImportant()) {
+            enviromentContent += " " + commonConst.IMPORTANT;
         }
 
         enviromentContent += "\n";
