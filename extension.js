@@ -10,7 +10,7 @@ function init() {
 }
 
 function enable() {
-    enviromentManager = new EnviromentManager();
+    enviromentManager = new EnviromentManager("/home/abdrashitov/shell/environments.sh");
 } // вызывается при включении; создаем все здесь
 
 function disable() {

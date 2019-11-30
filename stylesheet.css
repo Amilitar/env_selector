@@ -7,3 +7,14 @@
     border-radius: 5px;
     padding: .5em;
 }
+
+.enviromentImportant{
+    padding-top: 3px;
+    color: red;
+    font-weight: bold;
+}
+
+.enviroment{
+    padding-top: 3px;
+    color: aqua;
+}
