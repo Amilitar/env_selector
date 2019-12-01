@@ -1,1 +1,10 @@
-{"name": "Enviroment selector", "description": "Show current enviroment and choose other enviroments","version": "1.0.0", "uuid": "env_selector@abdrashitovni.ru", "shell-version": ["3.32.1"]}
+{
+  "name": "Enviroment selector",
+  "description": "Show current enviroment and choose other enviroments",
+  "version": "0.0.1",
+  "uuid": "env_selector@abdrashitovni.ru",
+  "url": "https://github.com/Amilitar/env_selector",
+  "shell-version": [
+    "3.32.1"
+  ]
+}
