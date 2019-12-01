@@ -11,22 +11,42 @@ const {Enviroment} = Me.imports.enviroment;
 const commonConst = Me.imports.commonConst;
 const Lang = imports.lang;
 
-let tray_env_text_label = null;
 
 class EnviromentManager {
-    constructor(enviromentFilePath) {
-        this.enviromentFilePath = enviromentFilePath;
+    constructor(scriptPath) {
+        this.scriptPath = scriptPath;
+
+        this._createExtension()
+    }
+
+    _createExtension() {
         this.enviromentsButton = null;
         this.box = null;
         this.menuItems = [];
-        this._createEnviroments();
-        this.current_env = this.getCurrentEnviroment();
-        this.setDropdownMenu();
+        this.tray_env_text_label = null;
 
+        this.enviromentFilePath = GLib.spawn_command_line_sync("cat " + this.scriptPath)[1].toString();
+
+        if (this.enviromentFilePath === commonConst.PATH_TO_ENV_FILE || this.enviromentFilePath === commonConst.EMPTY) {
+            Main.notifyError(_("Please specify file to env path in " + this.scriptPath));
+            this.setDropdownMenu("Specify config!", "enviromentTopLabelImportant");
+        } else {
+            this._createEnviroments();
+        }
+        this._createConfigurationMenu(this.enviromentsButton)
     }
 
     _createEnviroments() {
-        this.enviroments = this._get_allowed_envs()
+        this.enviroments = this._get_allowed_envs();
+        this.current_env = this.getCurrentEnviroment();
+
+        let styleClass = "enviromentTopLabel";
+        if (this.current_env.isImportant()) {
+            styleClass = "enviromentTopLabelImportant";
+        }
+
+        this.setDropdownMenu(this.current_env.getName(), styleClass);
+        this._createEnviromentMenu(this.enviromentsButton);
     }
 
     _get_allowed_envs() {
@@ -66,31 +86,34 @@ class EnviromentManager {
         return undefined;
     }
 
-    setDropdownMenu() {
-        let styleClass = "enviromentTopLabel";
-        if (this.current_env.isImportant()) {
-            styleClass = "enviromentTopLabelImportant";
-        }
-
-        tray_env_text_label = new St.Label({
-            text: this.current_env.getName(),
+    setDropdownMenu(startName, styleClass) {
+        this.tray_env_text_label = new St.Label({
+            text: startName,
             style_class: styleClass
         });
 
-        // 1 - выравнивание меню относительно кнопки(1 - слева, 0 - справа, 0.5 - по центру)
-        // true, если автоматически создавать меню
-        this.enviromentsButton = new PanelMenu.Button(0.5, "DoNotDisturb", false);
-        this.enviromentsButton.menu.style_class = "test";
-        // `right` - где мы хотим увидеть кнопку (left/center/right)
-        Main.panel.addToStatusArea("DoNotDisturbRole", this.enviromentsButton, 0, "center");
-        this.box = new St.BoxLayout();
-        this.box.add_child(tray_env_text_label);
-        this.enviromentsButton.actor.add_child(this.box);
+        this.enviromentsButton = new PanelMenu.Button(0.5, "EnviromentMenuButton", false);
 
-        this.createEnviromentMenu(this.enviromentsButton);
+        Main.panel.addToStatusArea("EnviromentMenuRole", this.enviromentsButton, 0, "center");
+        this.box = new St.BoxLayout();
+        this.box.add_child(this.tray_env_text_label);
+        this.enviromentsButton.actor.add_child(this.box);
     }
 
-    createEnviromentMenu(enviromentsButton) {
+    _createConfigurationMenu(enviromentsButton) {
+        enviromentsButton.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
+
+        let menuItem = new PopupMenu.PopupMenuItem("Reload...");
+        menuItem.style_class = "menuItem";
+        menuItem.connect("activate", Lang.bind(this, function () {
+            this.destroy();
+            this._createExtension();
+        }));
+        this.menuItems.push(menuItem);
+        enviromentsButton.menu.addMenuItem(menuItem);
+    }
+
+    _createEnviromentMenu(enviromentsButton) {
         let handle = this;
         this.enviroments.forEach(function (enviroment) {
             if (enviroment.isVisible()) {
@@ -104,22 +127,18 @@ class EnviromentManager {
 
                 menuItem.connect("activate", Lang.bind({envManager: handle, enviroment: enviroment}, function () {
                     if (this.enviroment.isImportant()) {
-                        tray_env_text_label.style_class = commonConst.ENVIROMENT_IMPORTANT;
+                        this.envManager.tray_env_text_label.style_class = commonConst.ENVIROMENT_IMPORTANT;
                     } else {
-                        tray_env_text_label.style_class = commonConst.ENVIROMENT;
+                        this.envManager.tray_env_text_label.style_class = commonConst.ENVIROMENT;
                     }
 
                     this.envManager.setCurrentEnviroment(this.enviroment);
-                    tray_env_text_label.text = this.enviroment.getName();
+                    this.envManager.tray_env_text_label.text = this.enviroment.getName();
                 }));
 
                 enviromentsButton.menu.addMenuItem(menuItem);
             }
         });
-        enviromentsButton.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
-        let aboutButton = new PopupMenu.PopupMenuItem("About...");
-        aboutButton.style_class = "menuItem";
-        enviromentsButton.menu.addMenuItem(aboutButton);
     }
 
     setCurrentEnviroment(enviroment) {
@@ -152,12 +171,8 @@ class EnviromentManager {
     }
 
     destroy() {
-        /*
-        This call the parent destroy function
-        */
-
-        if (tray_env_text_label !== undefined) {
-            tray_env_text_label.destroy();
+        if (this.tray_env_text_label !== undefined) {
+            this.tray_env_text_label.destroy();
         }
         this._destroy(this.enviromentsButton);
         this._destroy(this.box);

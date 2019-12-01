@@ -1,16 +1,16 @@
 .menuItem {
-    padding: 7px;
+    padding: 4px;
 }
 
 .enviromentImportant {
-    padding: 7px;
+    padding: 4px;
     color: #ff4f4a;
     font-weight: bold;
     /*background-color: #3c3f41;*/
 }
 
 .enviroment {
-    padding: 7px;
+    padding: 4px;
     color: #3482b9;
 }
 

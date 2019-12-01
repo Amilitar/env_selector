@@ -1,12 +1,12 @@
-# Enviroment Selector
-Enable and disable part of file. Use for fast change enviroments in development workflow
+# Environment Selector
+Enable and disable part of file. Use for fast change environments in development workflow
 
 ---
 
 How-To Install
 ==============
 
-Find this extention in https://extensions.gnome.org/
+Find this extension in https://extensions.gnome.org/
 Enable extension
 
 Or
@@ -16,26 +16,27 @@ Install extension
 
 First start
 ===============
-1. Specify enviroment path
-    * Create enviroment path with next format
+1. Specify environment path
+  * Create environment path with next format
 
-    ```shell script
-    # common
-    Base command which will be common for all enviroments
+  ```shell script
+   # common
+   Base command which will be common for all environments
 
-    # enviroment Alfa
-    Command for Alfa enviroment
+   # environment Alfa
+   Command for Alfa environment
 
-    # enviromen Bravo important
-    # command for Bravo enviromend
-    ```
+   # environment Bravo important
+   # command for Bravo environment
+   ```
 
-    * Common section used for common command and this section doesn`t to show in dropdown menu
-    * Enviroment section used for enviromet specific command. Show in dropdown menu. 
-        * Important attribute, that means this item wil be red and bold
-        * If all command in enviromet commented that means enviroment unactive, else active
+  * Common section used for common command and this section does not show in dropdown menu
+  * Environment section used for environment specific command. Show in dropdown menu.
+      * Important attribute, that means this item will be red and bold
+      * If all command in environment commented that means environment inactive, else active
 
 2. Specify config file
-    * Open ~/.config/env_selector/.config
-    * Put path to the enviroment file
-    * Save and reload extension Alt + F2, "r" and enter 
+  * Open ~/.config/env_selector/.config
+  * Put path to the environment file
+  * Save and reload extension Alt + F2, "r" and enter
+
