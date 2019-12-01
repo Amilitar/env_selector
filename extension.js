@@ -4,9 +4,9 @@ const GLib = imports.gi.GLib;
 const Gio = imports.gi.Gio;
 
 const commonConst = Me.imports.commonConst;
-const {EnviromentManager} = Me.imports.enviromentManager;
+const {EnvironmentManager} = Me.imports.environmentManager;
 
-let enviromentManager;
+let environmentManager;
 
 function _getConfigDirectoryPath() {
     let directoryPath = GLib.build_filenamev([GLib.get_user_config_dir(), commonConst.ENV_SELECTOR]);
@@ -28,11 +28,11 @@ function enable() {
 
     let scriptPath = GLib.build_filenamev([directoryPath, commonConst.CONFIG_FOLDER]);
 
-    enviromentManager = new EnviromentManager(scriptPath);
+    environmentManager = new EnvironmentManager(scriptPath);
 }
 
 function disable() {
-    if (enviromentManager !== undefined) {
-        enviromentManager.destroy()
+    if (environmentManager !== undefined) {
+        environmentManager.destroy()
     }
 }

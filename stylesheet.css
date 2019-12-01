@@ -2,14 +2,14 @@
     padding: 4px;
 }
 
-.enviromentImportant {
+.environmentImportant {
     padding: 4px;
     color: #ff4f4a;
     font-weight: bold;
     /*background-color: #3c3f41;*/
 }
 
-.enviroment {
+.environment {
     padding: 4px;
     color: #3482b9;
 }
@@ -18,20 +18,20 @@
     background-color: #CCDDDD;
 }
 
-.enviromentImportant:hover {
+.environmentImportant:hover {
     background-color: #CCDDDD;
 }
 
-.enviroment:hover {
+.environment:hover {
     background-color: #CCDDDD;
 }
 
-.enviromentTopLabel {
+.environmentTopLabel {
     padding-top: 3px;
     color: #3482b9;
 }
 
-.enviromentTopLabelImportant {
+.environmentTopLabelImportant {
     padding-top: 3px;
     color: #ff4f4a;
 }

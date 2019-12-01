@@ -1,6 +1,6 @@
 {
-  "name": "Enviroment selector",
-  "description": "Show current enviroment and choose other enviroments",
+  "name": "Environment selector",
+  "description": "Show current environment and choose other environments",
   "version": "0.0.2",
   "uuid": "env_selector@abdrashitovni.ru",
   "url": "https://github.com/Amilitar/env_selector",

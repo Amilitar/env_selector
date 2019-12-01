@@ -3,8 +3,8 @@ const ENV_SELECTOR = "env_selector";
 const EMPTY = "";
 const CONFIG_FOLDER = ".config";
 
-const ENVIROMENT = "enviroment";
-const ENVIROMENT_IMPORTANT = "enviromentImportant";
+const ENVIRONMENT = "environment";
+const ENVIRONMENT_IMPORTANT = "environmentImportant";
 const COMMON = "common";
 
 const IMPORTANT = "important";
