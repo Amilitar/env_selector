@@ -80,6 +80,7 @@ class EnviromentManager {
         // 1 - выравнивание меню относительно кнопки(1 - слева, 0 - справа, 0.5 - по центру)
         // true, если автоматически создавать меню
         this.enviromentsButton = new PanelMenu.Button(0.5, "DoNotDisturb", false);
+        this.enviromentsButton.menu.style_class = "test";
         // `right` - где мы хотим увидеть кнопку (left/center/right)
         Main.panel.addToStatusArea("DoNotDisturbRole", this.enviromentsButton, 0, "center");
         this.box = new St.BoxLayout();
@@ -116,6 +117,9 @@ class EnviromentManager {
             }
         });
         enviromentsButton.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
+        let aboutButton = new PopupMenu.PopupMenuItem("About...");
+        aboutButton.style_class = "menuItem";
+        enviromentsButton.menu.addMenuItem(aboutButton);
     }
 
     setCurrentEnviroment(enviroment) {
