@@ -67,9 +67,9 @@ class EnviromentManager {
     }
 
     setDropdownMenu() {
-        let styleClass = commonConst.ENVIROMENT;
+        let styleClass = "enviromentTopLabel";
         if (this.current_env.isImportant()) {
-            styleClass = commonConst.ENVIROMENT_IMPORTANT;
+            styleClass = "enviromentTopLabelImportant";
         }
 
         tray_env_text_label = new St.Label({
@@ -95,6 +95,12 @@ class EnviromentManager {
             if (enviroment.isVisible()) {
                 let menuItem = new PopupMenu.PopupMenuItem(enviroment.getName());
                 handle.menuItems.push(menuItem);
+                if (enviroment.isImportant()) {
+                    menuItem.style_class = commonConst.ENVIROMENT_IMPORTANT;
+                } else {
+                    menuItem.style_class = commonConst.ENVIROMENT;
+                }
+
                 menuItem.connect("activate", Lang.bind({envManager: handle, enviroment: enviroment}, function () {
                     if (this.enviroment.isImportant()) {
                         tray_env_text_label.style_class = commonConst.ENVIROMENT_IMPORTANT;
@@ -109,6 +115,7 @@ class EnviromentManager {
                 enviromentsButton.menu.addMenuItem(menuItem);
             }
         });
+        enviromentsButton.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
     }
 
     setCurrentEnviroment(enviroment) {

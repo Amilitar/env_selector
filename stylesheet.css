@@ -1,10 +1,30 @@
 .enviromentImportant {
-    padding-top: 3px;
+    padding: 5px;
     color: red;
     font-weight: bold;
+    background-color: #3c3f41;
+}
+
+.enviromentImportant:hover {
+    background-color: #2b2b2b;
+}
+
+.enviroment:hover {
+    background-color: #2b2b2b;
 }
 
 .enviroment {
+    padding: 5px;
+    color: aqua;
+    background-color: #3c3f41;
+}
+
+.enviromentTopLabel {
+    padding-top: 3px;
+    color: aqua;
+}
+
+.enviromentTopLabelImportant {
     padding-top: 3px;
     color: aqua;
 }

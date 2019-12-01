@@ -73,9 +73,9 @@ class Enviroment {
     toString() {
         let enviromentContent = commonConst.SHARP + " ";
         if (!this.isVisible()) {
-            enviromentContent = this.getName();
+            enviromentContent += this.getName();
         } else {
-            enviromentContent = "enviroment " + this.getName();
+            enviromentContent += "enviroment " + this.getName();
         }
 
         if (this.isImportant()) {

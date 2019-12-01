@@ -13,8 +13,7 @@ function init() {
 }
 
 function enable() {
-
-    let directoryPath = GLib.build_filenamev([GLib.get_user_config_dir(), "env_selector"]);
+    let directoryPath = GLib.build_filenamev([GLib.get_user_config_dir(), commonConst.ENV_SELECTOR]);
 
     let directory = Gio.File.new_for_path(directoryPath);
     if (!directory.query_exists(null)) {
@@ -38,5 +37,3 @@ function disable() {
         enviromentManager.destroy()
     }
 }
-
-// journalctl /usr/bin/gnome-shell | grep 'env_selector' | tail -10
