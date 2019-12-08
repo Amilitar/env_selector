@@ -8,7 +8,8 @@ const GLib = imports.gi.GLib;
 const ExtensionUtils = imports.misc.extensionUtils;
 const Me = ExtensionUtils.getCurrentExtension();
 const {Environment} = Me.imports.environment;
-const commonConst = Me.imports.commonConst;
+const commonConst = Me.imports.const.commonConst;
+const messageConst = Me.imports.const.messageConst;
 const Lang = imports.lang;
 
 
@@ -25,11 +26,11 @@ class EnvironmentManager {
         this.menuItems = [];
         this.tray_env_text_label = null;
 
-        this.environmentFilePath = GLib.spawn_command_line_sync("cat " + this.scriptPath)[1].toString();
+        this.environmentFilePath = GLib.spawn_command_line_sync(commonConst.CAT + this.scriptPath)[1].toString();
 
         if (this.environmentFilePath === commonConst.PATH_TO_ENV_FILE || this.environmentFilePath === commonConst.EMPTY) {
-            Main.notifyError(_("Please specify file to env path in " + this.scriptPath));
-            this.setDropdownMenu("Specify config!", "environmentTopLabelImportant");
+            Main.notifyError(_(messageConst.SPECIFY_CONFIG_NOTIFY_MESSAGE + this.scriptPath));
+            this.setDropdownMenu(messageConst.SPECIFY_CONFIG_MESSAGE, commonConst.ENVIRONMENT_TOP_LABEL_IMPORTANT);
         } else {
             this._createEnvironments();
         }
@@ -40,9 +41,9 @@ class EnvironmentManager {
         this.environments = this._get_allowed_envs();
         this.current_env = this.getCurrentEnvironment();
 
-        let styleClass = "environmentTopLabel";
+        let styleClass = commonConst.ENVIRONMENT_TOP_LABEL;
         if (this.current_env.isImportant()) {
-            styleClass = "environmentTopLabelImportant";
+            styleClass = commonConst.ENVIRONMENT_TOP_LABEL_IMPORTANT;
         }
 
         this.setDropdownMenu(this.current_env.getName(), styleClass);
@@ -50,12 +51,12 @@ class EnvironmentManager {
     }
 
     _get_allowed_envs() {
-        let source_environments = GLib.spawn_command_line_sync("cat " + this.environmentFilePath)[1].toString();
+        let source_environments = GLib.spawn_command_line_sync(commonConst.CAT + this.environmentFilePath)[1].toString();
         let environments = [];
         let environment = null;
         let handler = this;
-        source_environments.split("\n").forEach(function (line) {
-            if (line !== undefined && line !== "") {
+        source_environments.split(commonConst.ENTER).forEach(function (line) {
+            if (line !== undefined && line !== commonConst.EMPTY) {
                 let environment_name = handler._getClearEnvironmentName(line);
                 if (environment_name !== undefined) {
                     environment = new Environment(line);
@@ -75,7 +76,7 @@ class EnvironmentManager {
      * @private
      */
     _getClearEnvironmentName(sourceString) {
-        let options = sourceString.split(" ");
+        let options = sourceString.split(commonConst.SPACE);
         if (options[0] !== undefined && options[0] === commonConst.SHARP && options[1] !== undefined) {
             if (options[1] === commonConst.COMMON) {
                 return options[1];
@@ -97,15 +98,15 @@ class EnvironmentManager {
         Main.panel.addToStatusArea("EnvironmentMenuRole", this.environmentsButton, 0, "center");
         this.box = new St.BoxLayout();
         this.box.add_child(this.tray_env_text_label);
-        this.environmentsButton.actor.add_child(this.box);
+        this.environmentsButton.add_child(this.box);
     }
 
     _createConfigurationMenu(environmentsButton) {
         environmentsButton.menu.addMenuItem(new PopupMenu.PopupSeparatorMenuItem());
 
-        let menuItem = new PopupMenu.PopupMenuItem("Reload...");
-        menuItem.style_class = "menuItem";
-        menuItem.connect("activate", Lang.bind(this, function () {
+        let menuItem = new PopupMenu.PopupMenuItem(messageConst.RELOAD_MESSAGE);
+        menuItem.style_class = commonConst.MENU_ITEM;
+        menuItem.connect(commonConst.ACTIVATE, Lang.bind(this, function () {
             this.destroy();
             this._createExtension();
         }));
@@ -125,7 +126,10 @@ class EnvironmentManager {
                     menuItem.style_class = commonConst.ENVIRONMENT;
                 }
 
-                menuItem.connect("activate", Lang.bind({envManager: handle, environment: environment}, function () {
+                menuItem.connect(commonConst.ACTIVATE, Lang.bind({
+                    envManager: handle,
+                    environment: environment
+                }, function () {
                     if (this.environment.isImportant()) {
                         this.envManager.tray_env_text_label.style_class = commonConst.ENVIRONMENT_IMPORTANT;
                     } else {
@@ -171,11 +175,6 @@ class EnvironmentManager {
     }
 
     destroy() {
-        if (this.tray_env_text_label !== undefined) {
-            this.tray_env_text_label.destroy();
-        }
-        this._destroy(this.environmentsButton);
-        this._destroy(this.box);
         let handle = this;
         if (this.menuItems !== undefined) {
             this.menuItems.forEach(function (menuItem) {
@@ -183,6 +182,9 @@ class EnvironmentManager {
             });
         }
 
+        this._destroy(this.box);
+        this.environmentsButton.hide();
+        this.environmentsButton.destroy();
         this.environments = null;
     }
 }

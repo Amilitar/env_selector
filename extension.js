@@ -3,7 +3,7 @@ const Me = ExtensionUtils.getCurrentExtension();
 const GLib = imports.gi.GLib;
 const Gio = imports.gi.Gio;
 
-const commonConst = Me.imports.commonConst;
+const commonConst = Me.imports.const.commonConst;
 const {EnvironmentManager} = Me.imports.environmentManager;
 
 let environmentManager;
